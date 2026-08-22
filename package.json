@@ -1,0 +1,19 @@
+{
+  "name": "bot-freelance-market",
+  "version": "1.0.0",
+  "description": "BOT Freelance Market - Job board with escrow on BOT Chain",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:testnet": "hardhat run scripts/deploy.js --network botchain_testnet",
+    "deploy:mainnet": "hardhat run scripts/deploy.js --network botchain"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.9.3"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "dotenv": "^16.3.1",
+    "hardhat": "^2.19.0"
+  }
+}
