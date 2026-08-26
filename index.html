@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOT Freelance Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0f1a;--card:#111827;--card2:#1a2235;--border:#1e3a5f;--accent:#3b82f6;--accent2:#60a5fa;--accent-glow:rgba(59,130,246,0.15);--text:#e2e8f0;--text2:#94a3b8;--green:#22c55e;--red:#ef4444;--orange:#f59e0b;--purple:#a78bfa}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.topbar{background:linear-gradient(135deg,#0f172a,#1e293b);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+.logo{display:flex;align-items:center;gap:12px;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;-webkit-text-fill-color:white}
+.wallet-btn{padding:10px 24px;border-radius:12px;border:1px solid var(--accent);background:var(--accent-glow);color:var(--accent2);cursor:pointer;font-size:14px;font-weight:600;transition:all .3s}
+.wallet-btn:hover{background:var(--accent);color:#fff}
+.wallet-btn.connected{border-color:var(--green);color:var(--green);background:rgba(34,197,94,0.1)}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.stat-label{color:var(--text2);font-size:13px;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
+.stat-value{font-size:28px;font-weight:700;color:var(--text)}
+.section-title{font-size:20px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.create-form{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:32px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:13px;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.form-group input,.form-group textarea{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--text);font-size:14px;outline:none;transition:border .3s}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--accent)}
+.form-group textarea{resize:vertical;min-height:80px}
+.submit-btn{width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--accent),#2563eb);color:#fff;font-size:15px;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s;margin-top:8px}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(59,130,246,0.3)}
+.submit-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.jobs-grid{display:grid;gap:16px;margin-bottom:32px}
+.job-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;transition:border-color .3s}
+.job-card:hover{border-color:var(--accent)}
+.job-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.job-title{font-size:17px;font-weight:700}
+.job-budget{font-size:18px;font-weight:700;color:var(--accent2)}
+.job-desc{color:var(--text2);font-size:14px;margin-bottom:16px;line-height:1.5}
+.job-meta{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.job-status{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;text-transform:uppercase}
+.status-open{background:rgba(34,197,94,0.15);color:var(--green)}
+.status-progress{background:rgba(59,130,246,0.15);color:var(--accent2)}
+.status-completed{background:rgba(167,139,250,0.15);color:var(--purple)}
+.status-disputed{background:rgba(239,68,68,0.15);color:var(--red)}
+.status-cancelled{background:rgba(148,163,184,0.15);color:var(--text2)}
+.job-addr{font-size:12px;color:var(--text2);font-family:monospace}
+.job-actions{display:flex;gap:8px;margin-top:16px}
+.action-btn{padding:8px 18px;border-radius:10px;border:1px solid var(--border);background:var(--card2);color:var(--text);font-size:13px;cursor:pointer;font-weight:600;transition:all .3s}
+.action-btn:hover{border-color:var(--accent);color:var(--accent2)}
+.action-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.action-btn.danger{border-color:var(--red);color:var(--red)}
+.tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--card);border-radius:12px;padding:4px;border:1px solid var(--border)}
+.tab{padding:10px 20px;border-radius:10px;cursor:pointer;font-size:14px;color:var(--text2);transition:all .3s;border:none;background:transparent;font-weight:500}
+.tab.active{background:var(--accent);color:#fff;font-weight:600}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text2)}
+.empty-state .icon{font-size:48px;margin-bottom:16px}
+.toast{position:fixed;bottom:24px;right:24px;padding:14px 24px;border-radius:12px;font-size:14px;font-weight:600;z-index:200;animation:slideIn .3s ease}
+.toast.success{background:var(--green);color:#fff}
+.toast.error{background:var(--red);color:#fff}
+@keyframes slideIn{from{transform:translateX(100px);opacity:0}to{transform:translateX(0);opacity:1}}
+@media(max-width:768px){.stats{grid-template-columns:repeat(2,1fr)}.form-row{grid-template-columns:1fr}.topbar{padding:12px 16px;flex-wrap:wrap;gap:12px}}
+
+/* ===== Landing page — marketplace bento grid ===== */
+:root{--lp-bg:#08110f;--lp-card:#0e1a17;--lp-card2:#0a1512;--lp-text:#eaf5f2;--lp-text2:#8fa39d;--lp-accent:#14b8a6;--lp-accent2:#5eead4;--lp-border:rgba(20,184,166,0.16)}
+.lp-landing{background:var(--lp-bg);color:var(--lp-text);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+.lp-landing a{color:inherit;text-decoration:none}
+.lp-landing h1,.lp-landing h2,.lp-landing h3{font-family:'Sora','Inter',sans-serif}
+.lp-nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:18px 40px;background:rgba(8,17,15,0.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--lp-border)}
+.lp-nav-logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;font-family:'Sora',sans-serif}
+.lp-nav-logo .lp-logo-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--lp-accent),var(--lp-accent2));display:flex;align-items:center;justify-content:center;font-size:16px}
+.lp-nav-links{display:flex;gap:32px;font-size:14px;color:var(--lp-text2)}
+.lp-nav-links a:hover{color:var(--lp-text)}
+.lp-launch-btn{padding:10px 20px;border-radius:10px;background:var(--lp-accent);color:#04231e;font-size:14px;font-weight:700;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.lp-launch-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(20,184,166,0.35)}
+.lp-hero{max-width:900px;margin:0 auto;padding:110px 24px 60px;text-align:center}
+.lp-eyebrow{display:inline-block;padding:7px 16px;border-radius:20px;background:var(--lp-card);border:1px solid var(--lp-border);color:var(--lp-accent2);font-size:12px;font-weight:700;letter-spacing:1px;margin-bottom:28px}
+.lp-hero h1{font-size:56px;line-height:1.12;font-weight:800;letter-spacing:-1px;margin-bottom:22px}
+.lp-hero h1 span{color:var(--lp-accent)}
+.lp-hero p{font-size:18px;color:var(--lp-text2);max-width:620px;margin:0 auto 36px;line-height:1.6}
+.lp-cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:34px}
+.lp-btn-primary{padding:14px 28px;border-radius:12px;background:var(--lp-accent);color:#04231e;font-weight:700;font-size:15px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.lp-btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(20,184,166,0.35)}
+.lp-btn-secondary{padding:14px 28px;border-radius:12px;background:transparent;color:var(--lp-text);font-weight:700;font-size:15px;border:1px solid var(--lp-border);cursor:pointer;transition:all .2s}
+.lp-btn-secondary:hover{border-color:var(--lp-accent);color:var(--lp-accent2)}
+.lp-social-proof{display:flex;align-items:center;justify-content:center;gap:12px}
+.lp-avatar-stack{display:flex}
+.lp-avatar{width:36px;height:36px;border-radius:50%;border:2px solid var(--lp-bg);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:#04231e;margin-left:-10px}
+.lp-avatar:first-child{margin-left:0}
+.lp-avatar.a1{background:var(--lp-accent)}
+.lp-avatar.a2{background:var(--lp-accent2)}
+.lp-avatar.a3{background:#facc15}
+.lp-avatar.a4{background:#c084fc;color:#1a0b2e}
+.lp-social-text{font-size:13px;color:var(--lp-text2)}
+.lp-section{max-width:1080px;margin:0 auto;padding:60px 24px}
+.lp-section-head{text-align:center;margin-bottom:44px}
+.lp-section-head h2{font-size:34px;font-weight:800;letter-spacing:-0.5px;margin-bottom:12px}
+.lp-section-head p{color:var(--lp-text2);font-size:15px}
+.lp-bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:170px;gap:18px}
+.lp-tile{background:var(--lp-card);border:1px solid var(--lp-border);border-radius:20px;padding:26px;display:flex;flex-direction:column;justify-content:flex-end;transition:transform .2s,box-shadow .2s,border-color .2s;position:relative;overflow:hidden}
+.lp-tile:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(20,184,166,0.16);border-color:rgba(20,184,166,0.45)}
+.lp-tile-big{grid-column:span 2;grid-row:span 2}
+.lp-tile-wide{grid-column:span 2}
+.lp-tile-icon{width:44px;height:44px;border-radius:12px;background:rgba(20,184,166,0.15);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px}
+.lp-tile-big .lp-tile-icon{width:52px;height:52px;font-size:24px}
+.lp-tile h3{font-size:17px;font-weight:700;margin-bottom:8px}
+.lp-tile-big h3{font-size:24px}
+.lp-tile p{font-size:13.5px;color:var(--lp-text2);line-height:1.6}
+.lp-tile-tag{position:absolute;top:22px;right:22px;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--lp-accent2);text-transform:uppercase}
+.lp-cta-banner{max-width:1080px;margin:0 auto 70px;padding:56px 40px;background:linear-gradient(135deg,var(--lp-card),var(--lp-card2));border:1px solid var(--lp-border);border-radius:24px;text-align:center}
+.lp-cta-banner h2{font-size:28px;font-weight:800;margin-bottom:12px}
+.lp-cta-banner p{color:var(--lp-text2);font-size:15px;margin-bottom:26px}
+.lp-divider{display:flex;align-items:center;gap:16px;max-width:1080px;margin:0 auto;padding:0 24px 40px;color:var(--lp-text2);font-size:12px;font-weight:700;letter-spacing:2px}
+.lp-divider::before,.lp-divider::after{content:'';flex:1;height:1px;background:var(--lp-border)}
+@media(max-width:900px){
+  .lp-nav-links{display:none}
+  .lp-hero h1{font-size:36px}
+  .lp-hero p{font-size:16px}
+  .lp-bento{grid-template-columns:1fr 1fr;grid-auto-rows:auto}
+  .lp-tile-big{grid-column:span 2;grid-row:span 1}
+  .lp-tile-wide{grid-column:span 2}
+  .lp-section{padding:44px 24px}
+}
+@media(max-width:560px){
+  .lp-bento{grid-template-columns:1fr}
+  .lp-tile-big,.lp-tile-wide{grid-column:span 1}
+}
+</style>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.9.0/ethers.umd.min.js"></script>
+
+<div class="lp-landing">
+  <nav class="lp-nav">
+    <div class="lp-nav-logo"><div class="lp-logo-icon">💼</div>BOT Freelance</div>
+    <div class="lp-nav-links">
+      <a href="#lp-grid">How it works</a>
+      <a href="#appSection">Live App</a>
+    </div>
+    <button class="lp-launch-btn" onclick="document.getElementById('appSection').scrollIntoView({behavior:'smooth'})">Launch App ↗</button>
+  </nav>
+
+  <section class="lp-hero">
+    <div class="lp-eyebrow">FREELANCE MARKETPLACE · BOT CHAIN</div>
+    <h1>Freelance work, <span>secured on-chain</span></h1>
+    <p>A decentralized marketplace where every job's budget sits in on-chain escrow the moment it's posted — released to the freelancer automatically when the work is approved. No invoices, no chasing payments, no middleman.</p>
+    <div class="lp-cta-row">
+      <button class="lp-btn-primary" onclick="document.getElementById('appSection').scrollIntoView({behavior:'smooth'})">Launch App</button>
+      <button class="lp-btn-secondary" onclick="document.getElementById('lp-grid').scrollIntoView({behavior:'smooth'})">See how it works</button>
+    </div>
+    <div class="lp-social-proof">
+      <div class="lp-avatar-stack">
+        <div class="lp-avatar a1">JK</div>
+        <div class="lp-avatar a2">MR</div>
+        <div class="lp-avatar a3">TS</div>
+        <div class="lp-avatar a4">+</div>
+      </div>
+      <div class="lp-social-text">Freelancers actively taking jobs right now</div>
+    </div>
+  </section>
+
+  <section class="lp-section" id="lp-grid">
+    <div class="lp-section-head">
+      <h2>One marketplace, fully on-chain</h2>
+      <p>How it works and what protects you, in a single view.</p>
+    </div>
+    <div class="lp-bento">
+      <div class="lp-tile lp-tile-big">
+        <div class="lp-tile-tag">Step 1</div>
+        <div class="lp-tile-icon">📋</div>
+        <h3>Post a job or offer services</h3>
+        <p>Clients describe the work and fund it upfront; freelancers browse open jobs and claim the ones that fit. Both sides lock in terms on-chain before a single hour of work starts.</p>
+      </div>
+      <div class="lp-tile">
+        <div class="lp-tile-icon">🔒</div>
+        <h3>Escrow protection</h3>
+        <p>Budgets are held in the smart contract, not a company account, until the client approves delivery.</p>
+      </div>
+      <div class="lp-tile">
+        <div class="lp-tile-icon">⭐</div>
+        <h3>On-chain reputation</h3>
+        <p>Every completed job is recorded permanently, building a portable track record no platform can erase.</p>
+      </div>
+      <div class="lp-tile lp-tile-wide">
+        <div class="lp-tile-icon">⚡</div>
+        <h3>Instant payouts</h3>
+        <p>The moment work is approved, escrowed BOT is released to the freelancer's wallet — no waiting on payment cycles.</p>
+      </div>
+      <div class="lp-tile">
+        <div class="lp-tile-icon">⚖️</div>
+        <h3>Fair disputes</h3>
+        <p>Either side can raise a dispute if terms weren't met, keeping the process honest without a middleman.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-cta-banner">
+    <h2>Ready to post your first job?</h2>
+    <p>Connect your wallet and get your job funded in escrow in under a minute.</p>
+    <button class="lp-btn-primary" onclick="document.getElementById('appSection').scrollIntoView({behavior:'smooth'})">Launch App</button>
+  </div>
+
+  <div class="lp-divider">LIVE APPLICATION</div>
+</div>
+
+<div id="appSection">
+<div class="topbar">
+  <div class="logo"><div class="logo-icon">💼</div>BOT Freelance Market</div>
+  <button class="wallet-btn" id="walletBtn" onclick="connectWallet()">Connect Wallet</button>
+</div>
+<div class="container">
+  <div class="stats">
+    <div class="stat-card"><div class="stat-label">Total Jobs</div><div class="stat-value" id="totalJobs">—</div></div>
+    <div class="stat-card"><div class="stat-label">Jobs Completed</div><div class="stat-value" id="completedJobs">—</div></div>
+    <div class="stat-card"><div class="stat-label">Value Locked</div><div class="stat-value" id="valueLocked">—</div></div>
+    <div class="stat-card"><div class="stat-label">Platform Fee</div><div class="stat-value" id="platformFee">2.5%</div></div>
+  </div>
+  <div class="section-title">📝 Post a Job</div>
+  <div class="create-form">
+    <div class="form-row">
+      <div class="form-group"><label>Job Title</label><input id="jobTitle" placeholder="e.g. Build a DApp frontend"></div>
+      <div class="form-group"><label>Budget (BOT)</label><input id="jobBudget" type="number" step="0.01" placeholder="1.0"></div>
+    </div>
+    <div class="form-group full" style="margin-bottom:16px"><label>Description</label><textarea id="jobDesc" placeholder="Describe the work needed..."></textarea></div>
+    <button class="submit-btn" id="postBtn" onclick="postJob()" disabled>Post Job</button>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('all')">All Jobs</button>
+    <button class="tab" onclick="switchTab('my-client')">My Posted Jobs</button>
+    <button class="tab" onclick="switchTab('my-freelancer')">My Freelance Jobs</button>
+  </div>
+  <div class="jobs-grid" id="jobsList"></div>
+</div>
+</div>
+<script>
+// Currently set to MAINNET. To switch back to testnet, change to:
+// chainId: "0x3C8", chainName: "BOT Chain Testnet", rpcUrls: ["https://rpc.bohr.life"], blockExplorerUrls: ["https://scan.bohr.life/"]
+const BOT_CHAIN = {
+  chainId: "0x2A5", // 677 in hex = BOT Chain Mainnet
+  chainName: "BOT Chain",
+  nativeCurrency: { name: "BOT", symbol: "BOT", decimals: 18 },
+  rpcUrls: ["https://rpc.botchain.ai"],
+  blockExplorerUrls: ["https://scan.botchain.ai/"]
+};
+const CONTRACT_ADDRESS="0x2A8900511f3831d5B1CC0598ec6513d0012C10d9";
+const ABI=[
+  "function createJob(string _title, string _description) external payable",
+  "function acceptJob(uint256 _jobId) external",
+  "function approveWork(uint256 _jobId) external",
+  "function cancelJob(uint256 _jobId) external",
+  "function raiseDispute(uint256 _jobId) external",
+  "function getJob(uint256 _jobId) external view returns (tuple(address client,address freelancer,string title,string description,uint256 budget,uint8 status,uint256 createdAt,uint256 completedAt))",
+  "function getJobCount() external view returns (uint256)"
+];
+let connected=false,account=null,jobs=[],currentTab='all';
+let provider=null,signer=null,contract=null;
+const statusLabels=['Open','In Progress','Completed','Disputed','Cancelled'];
+const statusClasses=['status-open','status-progress','status-completed','status-disputed','status-cancelled'];
+const CONTRACT_DEPLOYED=CONTRACT_ADDRESS!=='0x0000000000000000000000000000000000000000';
+function resetState(){connected=false;account=null;jobs=[];provider=null;signer=null;contract=null;document.getElementById('walletBtn').textContent='Connect Wallet';document.getElementById('walletBtn').classList.remove('connected');document.getElementById('postBtn').disabled=true;updateStats();renderJobs()}
+function showToast(msg,type='success'){const t=document.createElement('div');t.className='toast '+type;t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000)}
+function connectWallet(){
+  if(connected){resetState();return}
+  connectLive();
+}
+async function connectLive(){
+  if(typeof window.ethereum==='undefined'){showToast('MetaMask not found. Please install it to continue.','error');return}
+  try{
+    try{ await window.ethereum.request({method:'wallet_switchEthereumChain',params:[{chainId:BOT_CHAIN.chainId}]}) }
+    catch(err){ if(err.code===4902) await window.ethereum.request({method:'wallet_addEthereumChain',params:[BOT_CHAIN]}); else if(err.code===4001){showToast('Network switch rejected','error');return} }
+    provider=new ethers.BrowserProvider(window.ethereum);
+    await window.ethereum.request({method:'eth_requestAccounts'});
+    signer=await provider.getSigner();
+    account=await signer.getAddress();
+    contract=new ethers.Contract(CONTRACT_ADDRESS,ABI,signer);
+    connected=true;
+    document.getElementById('walletBtn').textContent=account.slice(0,6)+'...'+account.slice(-4);
+    document.getElementById('walletBtn').classList.add('connected');
+    document.getElementById('postBtn').disabled=false;
+    if(!CONTRACT_DEPLOYED){updateStats();renderJobs();showToast('Wallet connected! Deploy the contract and set CONTRACT_ADDRESS to enable on-chain actions.')}
+    else{ await loadLiveJobs(); showToast('Connected to BOT Chain!') }
+  }catch(e){ showToast('Connection failed: '+(e.message||e),'error') }
+}
+async function loadLiveJobs(){
+  if(!contract||!CONTRACT_DEPLOYED)return;
+  try{
+    const count=await contract.getJobCount();jobs=[];
+    for(let i=0;i<count;i++){
+      const j=await contract.getJob(i);
+      jobs.push({client:j.client,freelancer:j.freelancer,title:j.title,description:j.description,budget:parseFloat(ethers.formatEther(j.budget)).toFixed(2),status:Number(j.status),createdAt:Number(j.createdAt)*1000});
+    }
+    updateStats();renderJobs();
+  }catch(e){ showToast('Failed to load jobs: '+e.message,'error') }
+}
+if(typeof window!=='undefined'&&window.ethereum){
+  window.ethereum.on&&window.ethereum.on('accountsChanged',()=>{resetState()});
+  window.ethereum.on&&window.ethereum.on('chainChanged',()=>{window.location.reload()});
+}
+function updateStats(){
+  if(!connected){
+    document.getElementById('totalJobs').textContent='—';
+    document.getElementById('completedJobs').textContent='—';
+    document.getElementById('valueLocked').textContent='—';
+    return;
+  }
+  if(!CONTRACT_DEPLOYED){
+    document.getElementById('totalJobs').textContent='—';
+    document.getElementById('completedJobs').textContent='—';
+    document.getElementById('valueLocked').textContent='—';
+    return;
+  }
+  const total=jobs.length,completed=jobs.filter(j=>j.status===2).length;
+  const locked=jobs.filter(j=>j.status<2).reduce((s,j)=>s+parseFloat(j.budget),0);
+  document.getElementById('totalJobs').textContent=total;
+  document.getElementById('completedJobs').textContent=completed;
+  document.getElementById('valueLocked').textContent=locked.toFixed(2)+' BOT';
+}
+function renderJobs(){
+  const el=document.getElementById('jobsList');
+  if(!connected){el.innerHTML='<div class="empty-state"><div class="icon">💼</div>Connect wallet to see jobs</div>';return}
+  if(!CONTRACT_DEPLOYED){el.innerHTML='<div class="empty-state"><div class="icon">💼</div>Deploy contract to see live jobs</div>';return}
+  let filtered=jobs;
+  if(currentTab==='my-client')filtered=jobs.filter(j=>j.client===account);
+  if(currentTab==='my-freelancer')filtered=jobs.filter(j=>j.freelancer===account);
+  if(filtered.length===0){el.innerHTML='<div class="empty-state"><div class="icon">💼</div>No jobs found in this tab</div>';return}
+  el.innerHTML=filtered.map((j)=>{
+    const idx=jobs.indexOf(j);
+    let actions='';
+    if(j.status===0&&j.client!==account)actions=`<button class="action-btn primary" onclick="acceptJob(${idx})">Accept Job</button>`;
+    if(j.status===0&&j.client===account)actions=`<button class="action-btn danger" onclick="cancelJob(${idx})">Cancel</button>`;
+    if(j.status===1&&j.client===account)actions=`<button class="action-btn primary" onclick="approveWork(${idx})">Approve & Pay</button><button class="action-btn danger" onclick="raiseDispute(${idx})">Dispute</button>`;
+    return `<div class="job-card"><div class="job-header"><div class="job-title">${j.title}</div><div class="job-budget">${j.budget} BOT</div></div><div class="job-desc">${j.description}</div><div class="job-meta"><span class="job-status ${statusClasses[j.status]}">${statusLabels[j.status]}</span><span class="job-addr">Client: ${j.client}</span>${j.freelancer?`<span class="job-addr">Freelancer: ${j.freelancer}</span>`:''}</div>${actions?`<div class="job-actions">${actions}</div>`:''}</div>`}).join('');
+}
+function switchTab(tab){currentTab=tab;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));event.target.classList.add('active');renderJobs()}
+async function postJob(){
+  const title=document.getElementById('jobTitle').value,desc=document.getElementById('jobDesc').value,budget=document.getElementById('jobBudget').value;
+  if(!title||!budget||parseFloat(budget)<=0){showToast('Fill in title and budget','error');return}
+  if(!contract||!CONTRACT_DEPLOYED){showToast('Contract not deployed yet','error');return}
+  try{
+    showToast('Confirm in MetaMask...');
+    const tx=await contract.createJob(title,desc||'No description',{value:ethers.parseEther(budget)});
+    await tx.wait();
+    document.getElementById('jobTitle').value='';document.getElementById('jobDesc').value='';document.getElementById('jobBudget').value='';
+    await loadLiveJobs();showToast('Job posted on-chain!');
+  }catch(e){showToast('Transaction failed: '+(e.reason||e.message),'error')}
+}
+async function acceptJob(i){
+  if(!contract){showToast('Contract not deployed yet','error');return}
+  try{ showToast('Confirm in MetaMask...'); const tx=await contract.acceptJob(i); await tx.wait(); await loadLiveJobs(); showToast('Job accepted on-chain!') }
+  catch(e){showToast('Transaction failed: '+(e.reason||e.message),'error')}
+}
+async function approveWork(i){
+  if(!contract){showToast('Contract not deployed yet','error');return}
+  try{ showToast('Confirm in MetaMask...'); const tx=await contract.approveWork(i); await tx.wait(); await loadLiveJobs(); showToast('Work approved — payment sent on-chain!') }
+  catch(e){showToast('Transaction failed: '+(e.reason||e.message),'error')}
+}
+async function cancelJob(i){
+  if(!contract){showToast('Contract not deployed yet','error');return}
+  try{ showToast('Confirm in MetaMask...'); const tx=await contract.cancelJob(i); await tx.wait(); await loadLiveJobs(); showToast('Job cancelled on-chain — refunded') }
+  catch(e){showToast('Transaction failed: '+(e.reason||e.message),'error')}
+}
+async function raiseDispute(i){
+  if(!contract){showToast('Contract not deployed yet','error');return}
+  try{ showToast('Confirm in MetaMask...'); const tx=await contract.raiseDispute(i); await tx.wait(); await loadLiveJobs(); showToast('Dispute raised on-chain','error') }
+  catch(e){showToast('Transaction failed: '+(e.reason||e.message),'error')}
+}
+</script>
+</body>
+</html>
