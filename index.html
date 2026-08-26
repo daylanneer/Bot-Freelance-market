@@ -247,7 +247,7 @@ const BOT_CHAIN = {
   rpcUrls: ["https://rpc.bohr.life"],
   blockExplorerUrls: ["https://scan.bohr.life/"]
 };
-const CONTRACT_ADDRESS="0xa6b09F0569ebf00D30BE0282c988244d1fdcb581";
+const CONTRACT_ADDRESS="0x2A8900511f3831d5B1CC0598ec6513d0012C10d9";
 const ABI=[
   "function createJob(string _title, string _description) external payable",
   "function acceptJob(uint256 _jobId) external",
@@ -261,7 +261,7 @@ let connected=false,account=null,jobs=[],currentTab='all';
 let provider=null,signer=null,contract=null;
 const statusLabels=['Open','In Progress','Completed','Disputed','Cancelled'];
 const statusClasses=['status-open','status-progress','status-completed','status-disputed','status-cancelled'];
-const CONTRACT_DEPLOYED=CONTRACT_ADDRESS!=='0xa6b09F0569ebf00D30BE0282c988244d1fdcb581';
+const CONTRACT_DEPLOYED=CONTRACT_ADDRESS!=='0x2A8900511f3831d5B1CC0598ec6513d0012C10d9';
 function resetState(){connected=false;account=null;jobs=[];provider=null;signer=null;contract=null;document.getElementById('walletBtn').textContent='Connect Wallet';document.getElementById('walletBtn').classList.remove('connected');document.getElementById('postBtn').disabled=true;updateStats();renderJobs()}
 function showToast(msg,type='success'){const t=document.createElement('div');t.className='toast '+type;t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000)}
 function connectWallet(){
